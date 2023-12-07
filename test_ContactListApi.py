@@ -47,6 +47,8 @@ def test_addUser_profile():
     print(payload)
     response = requests.request("POST", url, headers=headers, data=payload)
     print(response.text)
+    assert response.status_code == 201
+    assert response.json()['user']['email'] == new_user
 
 def test_getContacts():
     url = "https://thinking-tester-contact-list.herokuapp.com/contacts"
@@ -87,6 +89,7 @@ def test_addContacts():
     print(response.text)
     json_response = response.json()
     contact_id["id"] = json_response["_id"]
+    assert response.status_code == 201
 
 def test_updateContact():
 
@@ -102,6 +105,8 @@ def test_updateContact():
     response = requests.request("PATCH", url, headers=headers, data=payload)
     print("New Contact Updated: ")
     print(response.text)
+    assert response.status_code == 200
+    assert response.json()['firstName'] == 'Nathan'
 
 
 def test_deleteContact():
@@ -114,3 +119,5 @@ def test_deleteContact():
     }
     response = requests.request("DELETE", url, headers=headers)
     print(response.text)
+    assert response.status_code == 200
+    assert response.text == 'Contact deleted'
